@@ -57,7 +57,6 @@ public class UserService {
 		user.changePassword(password);
 	}
 
-
 	// Pageable 인터페이스
 	public Page<User> search(Pageable pageable, String keyword) {
 		return userRepository.findAllByNameContaining(keyword, pageable);

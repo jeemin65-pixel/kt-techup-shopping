@@ -15,7 +15,7 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// 1. domain과 entity를 분리해야 (Domain-Driven Design (DDD))
+// 1. domain과 entity를 분리해야
 // 2. 굳이? 같이쓰지뭐
 @Getter
 @Entity
@@ -35,7 +35,7 @@ public class User extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@OneToMany(mappedBy = "user") // user 한명이 여러 order 를 가질 수 있는 1:N 관계 의미, mappedBy = "user" 는 Order 엔티티 안에 user 라는 필드가 외래키를 관리한다는 뜻
+	@OneToMany(mappedBy = "user")
 	private List<Order> orders = new ArrayList<>();
 
 	public User(String loginId, String password, String name, String email, String mobile, Gender gender,

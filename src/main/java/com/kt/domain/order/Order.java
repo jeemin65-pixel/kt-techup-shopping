@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor
 @Table(name = "orders")
+@NoArgsConstructor
 public class Order extends BaseEntity {
 	@Embedded
 	private Receiver receiver;
@@ -59,7 +59,6 @@ public class Order extends BaseEntity {
 	public void mapToOrderProduct(OrderProduct orderProduct) {
 		this.orderProducts.add(orderProduct);
 	}
-
 
 	//하나의 오더는 여러개의 상품을 가질수있음
 	// 1:N
