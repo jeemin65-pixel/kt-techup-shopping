@@ -69,19 +69,35 @@ public class OrderService {
 	}
 
 	// 주문 상태 변경
-	public void soldOut(Long id) {
-		var product = productRepository.findByIdOrThrow(id);
+	public void completed(Long id) {
+		var order = orderRepository.findByIdOrThrow(id);
 
-		product.soldOut();
+		order.completed();
 	}
 
-	// public void complete(Long id) {
-	// 	var order = orderRepository.findbyIdOrThrow(id);
-	//
-	// 	order.complete
-	//
-	//
-	// }
+	public void cancelled(Long id) {
+		var order = orderRepository.findByIdOrThrow(id);
+
+		order.cancelled();
+	}
+
+	public void shipped(Long id) {
+		var order = orderRepository.findByIdOrThrow(id);
+
+		order.shipped();
+	}
+
+	public void delivered(Long id) {
+		var order = orderRepository.findByIdOrThrow(id);
+
+		order.delivered();
+	}
+
+	public void confirmed(Long id) {
+		var order = orderRepository.findByIdOrThrow(id);
+
+		order.confirmed();
+	}
 
 
 }

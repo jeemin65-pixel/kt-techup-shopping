@@ -45,24 +45,40 @@ public class OrderController {
 		return ApiResult.ok();
 	}
 
-	// 주문 상태 변경
-	// @PatchMapping("{id}/complete")
-	// public ApiResult<Void> complete(@PathVariable Long id) {
-	// 	orderService.complete(id);
-	//
-	// 	return ApiResult.ok();
-	// }
-	//
-	// @PatchMapping("{id}/shipped")
-	// public ApiResult<Void> shipped(@PathVariable Long id) {
-	// 	orderService.shipped(id);
-	//
-	// 	return ApiResult.ok();
-	// }
+	//주문 상태 변경
+	@PatchMapping("{id}/completed")
+	public ApiResult<Void> completed(@PathVariable Long id) {
+		orderService.completed(id);
 
-	// CANCELLED("주문취소"),
-	// SHIPPED("배송중"),
-	// DELIVERED("배송완료"),
-	// CONFIRMED("구매확정");
+		return ApiResult.ok();
+	}
+
+	@PatchMapping("{id}/shipped")
+	public ApiResult<Void> shipped(@PathVariable Long id) {
+		orderService.shipped(id);
+
+		return ApiResult.ok();
+	}
+
+	@PatchMapping("{id}/cancelled")
+	public ApiResult<Void> cancelled(@PathVariable Long id) {
+		orderService.cancelled(id);
+
+		return ApiResult.ok();
+	}
+
+	@PatchMapping("{id}/delivered")
+	public ApiResult<Void> delivered(@PathVariable Long id) {
+		orderService.delivered(id);
+
+		return ApiResult.ok();
+	}
+
+	@PatchMapping("{id}/confirmed")
+	public ApiResult<Void> confirmed(@PathVariable Long id) {
+		orderService.confirmed(id);
+
+		return ApiResult.ok();
+	}
 
 }
