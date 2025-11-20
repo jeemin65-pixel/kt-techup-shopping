@@ -1,0 +1,20 @@
+package com.kt.dto.cart;
+
+import com.esotericsoftware.kryo.serializers.FieldSerializer;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+public record CartCreateRequest(
+	@NotNull
+	@Positive
+	Integer productCount,
+
+	@NotBlank
+	String productOption,
+
+	@NotNull
+	Long productId
+) {
+}

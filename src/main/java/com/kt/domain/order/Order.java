@@ -89,6 +89,7 @@ public class Order extends BaseEntity {
 	}
 
 	// 주문생성완료재고차감
+
 	// 배송받는사람정보변경
 	// 주문취소
 }
