@@ -67,37 +67,4 @@ public class OrderService {
 		product.mapToOrderProduct(orderProduct);
 		order.mapToOrderProduct(orderProduct);
 	}
-
-	// 주문 상태 변경
-	public void completed(Long id) {
-		var order = orderRepository.findByIdOrThrow(id);
-
-		order.completed();
-	}
-
-	public void cancelled(Long id) {
-		var order = orderRepository.findByIdOrThrow(id);
-
-		order.cancelled();
-	}
-
-	public void shipped(Long id) {
-		var order = orderRepository.findByIdOrThrow(id);
-
-		order.shipped();
-	}
-
-	public void delivered(Long id) {
-		var order = orderRepository.findByIdOrThrow(id);
-
-		order.delivered();
-	}
-
-	public void confirmed(Long id) {
-		var order = orderRepository.findByIdOrThrow(id);
-
-		order.confirmed();
-	}
-
-
 }

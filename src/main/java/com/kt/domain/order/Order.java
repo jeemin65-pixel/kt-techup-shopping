@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.kt.common.BaseEntity;
 import com.kt.domain.orderproduct.OrderProduct;
-import com.kt.domain.product.ProductStatus;
 import com.kt.domain.user.User;
 
 import jakarta.persistence.Embedded;
@@ -41,6 +40,7 @@ public class Order extends BaseEntity {
 	private User user;
 
 	@OneToMany(mappedBy = "order")
+	// @BatchSize(size = 2)
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 
 	private Order(Receiver receiver, User user) {
@@ -67,29 +67,8 @@ public class Order extends BaseEntity {
 	// 1:N
 
 	// 주문생성
-	// 주문 상태 변경
-	public void completed() {
-		this.status = OrderStatus.COMPLETED;
-	}
-
-	public void cancelled() {
-		this.status = OrderStatus.CANCELLED;
-	}
-
-	public void shipped() {
-		this.status = OrderStatus.SHIPPED;
-	}
-
-	public void delivered() {
-		this.status = OrderStatus.DELIVERED;
-	}
-
-	public void confirmed() {
-		this.status = OrderStatus.CONFIRMED;
-	}
-
+	// 주문상태변경
 	// 주문생성완료재고차감
-
 	// 배송받는사람정보변경
 	// 주문취소
 }

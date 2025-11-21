@@ -9,8 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 // bean validation이라는 기능을 통해서 유효성 검사
-// DTO (Data Transfer Object) : 계층 (레이어) 간 데이터 교환을 위한 객체
-public record UserCreateRequest( // 요청 데이터를 담은 DTO (Data Transfer Object)
+// DTO(Data Transfer Object) : 계층(레이어) 간 데이터 교환을 위한 객체
+public record UserCreateRequest(
 	@NotBlank
 	String loginId,
 	@NotBlank

@@ -37,4 +37,5 @@ public class ApiAdvice {
 
 		return ErrorResponse.error(HttpStatus.BAD_REQUEST, message);
 	}
+
 }

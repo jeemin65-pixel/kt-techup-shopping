@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,34 +12,41 @@ import com.kt.common.ErrorCode;
 import com.kt.common.Preconditions;
 import com.kt.domain.user.User;
 import com.kt.dto.user.UserRequest;
+import com.kt.repository.order.OrderRepository;
 import com.kt.repository.user.UserRepository;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Service // 비즈니스 로직을 담은 클래스임을 명시, @Component 처럼 bean 으로 등록되지만, 역할 구분을 위해 따로 사용
-@RequiredArgsConstructor // final 이나 @NonNull 이 붙은 필드에 대해서만 생성자를 만들어줌
-@Transactional // 모두 성공하거나, 실패하거나 원칙, class 위에 사용 되었으므로 모든 public 메서드에 적용
+// 구현체가 하나 이상 필요로해야 인터페이스가 의미가있다
+// 인터페이스 : 구현체 1:1로 다 나눠야하나
+// 관례를 지키려고 추상화를 굳이하는 것을 관습적추상화
+// 인터페이스로 굳이 나눴을때 불편한 점
+
+@Service
+@RequiredArgsConstructor
+@Transactional
 public class UserService {
-	private final UserRepository userRepository; // Service > Repository 순이므로 UserService 에 UserRepository 만들어줘야 함
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
+	private final OrderRepository orderRepository;
 
 	// 트랜잭션 처리해줘
 	// PSA - Portable Service Abstraction
 	// 환경설정을 살짝 바꿔서 일관된 서비스를 제공하는 것
-	public void create(UserRequest.@Valid Create request) { // 컨트롤러로부터 DTO 를 받아 User 객체로 변환하고 repository 에 저장하는 로직
-		var newUser = User.normalUser( // DTO로부터 받은 데이터를 기반으로 새로운 user entity 생성
-			request.loginId(),
-			request.password(),
-			request.name(),
-			request.email(),
-			request.mobile(),
-			request.gender(),
-			request.birthday(),
-			LocalDateTime.now(),
-			LocalDateTime.now()
-		);
+	public void create(UserRequest.Create request) {
+		var newUser = User.normalUser(
+				request.loginId(),
+			passwordEncoder.encode(request.password()),
+				request.name(),
+				request.email(),
+				request.mobile(),
+				request.gender(),
+				request.birthday(),
+				LocalDateTime.now(),
+				LocalDateTime.now()
+			);
 
-		userRepository.save(newUser);
+			userRepository.save(newUser);
 	}
 
 	public boolean isDuplicateLoginId(String loginId) {
@@ -75,7 +83,41 @@ public class UserService {
 	public void delete(Long id) {
 		userRepository.deleteById(id);
 		// 삭제에는 두가지 개념 - softdelete, harddelete
-		// var user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+		// var user = userRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 		// userRepository.delete(user);
+	}
+
+	public void getOrders(Long id) {
+		var user = userRepository.findByIdOrThrow(id, ErrorCode.NOT_FOUND_USER);
+		var orders = orderRepository.findAllByUserId(user.getId());
+
+		var products = orders.stream()
+			.flatMap(order -> order.getOrderProducts().stream()
+				.map(orderProduct -> orderProduct.getProduct().getName())).toList();
+
+		// var statuses = orders.stream()
+		// 	.flatMap(order -> order.getOrderProducts().stream()
+		// 		.map(orderProduct -> orderProduct.getOrder().getStatus())).toList();
+
+		// N개의 주문이 있는데 N개의 주문엔 상품이 존재하는데 가짓수가 1만개
+
+		// Stream의 연산과정
+		// 1. 스트림생성
+		// 2. 중간연산 -> 여러번 가능 O
+		// 3. 최종연산 -> 여러번 가능 X -> 재사용 불가능
+
+		// List<List<Product>> -> List<Product>
+
+		// N + 1 문제를 해결하는 방법
+		// 1. fetch join 사용 -> JPQL전용 -> 딱 1번 사용 2번사용하면 에러남
+		// 2. @EntityGraph 사용 -> JPA표준기능 -> 여러번 사용가능
+		// 3. batch fetch size 옵션 사용 -> 전역설정 -> paging동작원리와 같아서 성능이슈가 있을 수 있음
+		// 4. @BatchSize 어노테이션 사용 -> 특정 엔티티에만 적용 가능
+		// 5. native query 사용해서 해결
+
+		// Collection, stream, foreach
+
+		// 연관관계를 아예 끊는다 -> 엔티티자체를 느슨하게 결합해둔다.
+		// JPA를 안쓴다.
 	}
 }
