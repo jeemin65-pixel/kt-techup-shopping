@@ -2,6 +2,7 @@ package com.kt.service;
 
 import org.springframework.stereotype.Service;
 
+import com.kt.domain.cart.Cart;
 import com.kt.dto.cart.CartCreateRequest;
 import com.kt.repository.cart.CartRepository;
 
@@ -15,7 +16,9 @@ public class CartService {
 	private final CartRepository cartRepository;
 
 	public void create(CartCreateRequest request) {
-		// TODO: create 함수 개발
+		// Cart cart = new Cart(request.productCount(), request.productOption(), request.productId());
+
+		// cartRepository.save(cart);
 	}
 
 }
